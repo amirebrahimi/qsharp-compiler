@@ -491,7 +491,7 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
                     this.sourceFileDiagnostics).Concat(
                     this.projectReferenceDiagnostics).Concat(
                     this.referenceDiagnostics)
-                    .Select(d => d.Copy()).ToArray();
+                    .Select(d => d.Copy()).ToArray()!;
 
                 return new PublishDiagnosticParams
                 {

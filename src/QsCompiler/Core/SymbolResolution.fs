@@ -220,7 +220,7 @@ module SymbolResolution =
         let matchQualifiedName = SyntaxGenerator.FullyQualifiedName.Match fullName
         let asQualifiedName (str : string) = 
             let pieces = str.Split '.'
-            {Namespace = String.Join('.', pieces.Take(pieces.Length-1)) |> NonNullable<string>.New; Name = pieces.Last() |> NonNullable<string>.New}
+            {Namespace = String.Join(".", pieces.Take(pieces.Length-1)) |> NonNullable<string>.New; Name = pieces.Last() |> NonNullable<string>.New}
         if matchQualifiedName.Success then Some (matchQualifiedName.Value |> asQualifiedName) else None
 
     /// Checks whether the given attributes define an alternative name that may be used when loading a type or callable for testing purposes.

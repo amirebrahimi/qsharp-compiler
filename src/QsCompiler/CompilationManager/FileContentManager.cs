@@ -159,31 +159,31 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
         /// Returns a copy of the current scope diagnostics.
         /// </summary>
         internal ImmutableArray<Diagnostic> CurrentScopeDiagnostics() =>
-            this.scopeDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray();
+            this.scopeDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray()!;
 
         /// <summary>
         /// Returns a copy of the current syntax diagnostics.
         /// </summary>
         internal ImmutableArray<Diagnostic> CurrentSyntaxDiagnostics() =>
-            this.syntaxDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray();
+            this.syntaxDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray()!;
 
         /// <summary>
         /// Returns a copy of the current context diagnostics.
         /// </summary>
         internal ImmutableArray<Diagnostic> CurrentContextDiagnostics() =>
-            this.contextDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray();
+            this.contextDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray()!;
 
         /// <summary>
         /// Returns a copy of the current header diagnostics.
         /// </summary>
         internal ImmutableArray<Diagnostic> CurrentHeaderDiagnostics() =>
-            this.headerDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray();
+            this.headerDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray()!;
 
         /// <summary>
         /// Returns a copy of the current semantic diagnostics.
         /// </summary>
         internal ImmutableArray<Diagnostic> CurrentSemanticDiagnostics() =>
-            this.semanticDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray();
+            this.semanticDiagnostics.Get().Select(m => m.Copy()).ToImmutableArray()!;
 
         /// <summary>
         /// Given the position where the syntax check starts and ends relative to the original file content before the update, and the lineNrChange,
@@ -922,7 +922,7 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
                 change = this.unprocessedUpdates.Dequeue();
                 newText = Utils.GetChangedText(newText, change.Range.Start.Character, change.Range.End.Character, change.Text);
             }
-            textToInsert = newText;
+            textToInsert = newText!;
             return true;
         }
 

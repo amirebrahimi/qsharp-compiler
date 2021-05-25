@@ -495,7 +495,7 @@ namespace Microsoft.Quantum.QsCompiler
                 isExecutable: this.config.IsExecutable,
                 processorArchitecture: NonNullable<string>.New(string.IsNullOrWhiteSpace(processorArchitecture)
                     ? "Unspecified"
-                    : processorArchitecture));
+                    : processorArchitecture ?? string.Empty));
             compilationManager.UpdateReferencesAsync(references);
             compilationManager.AddOrUpdateSourceFilesAsync(files);
             this.VerifiedCompilation = compilationManager.Build();
@@ -521,7 +521,7 @@ namespace Microsoft.Quantum.QsCompiler
 
             if (!Uri.TryCreate(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute, out Uri thisDllUri))
             {
-                thisDllUri = new Uri(Path.GetFullPath(".", "CompilationLoader.cs"));
+                thisDllUri = new Uri(Path.GetFullPath("CompilationLoader.cs"));
             }
 
             if (this.config.LoadTargetSpecificDecompositions)

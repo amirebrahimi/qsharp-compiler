@@ -86,7 +86,7 @@ The content of the file should be similar to the following, with `Package_Name` 
 
   <PropertyGroup>
     <QscRef_Package_Name>
-      $(MSBuildThisFileDirectory)/../lib/netstandard2.1/Package.Name.dll
+      $(MSBuildThisFileDirectory)/../lib/netstandard2.0/Package.Name.dll
     </QscRef_Package_Name>
   </PropertyGroup>  
 

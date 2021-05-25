@@ -171,8 +171,11 @@ namespace Microsoft.Quantum.QsCompiler
         {
             var combinedBuilder = ImmutableDictionary.CreateBuilder<TypeParameterName, ResolvedType>();
 
-            foreach (var (typeParam, paramRes) in independentResolutions)
+            foreach (var res in independentResolutions)
             {
+                TypeParameterName typeParam = res.Key;
+                ResolvedType paramRes = res.Value;
+
                 // Skip any null mappings
                 if (paramRes is null)
                 {
@@ -218,14 +221,20 @@ namespace Microsoft.Quantum.QsCompiler
 
                 // Do any replacements for type parameters that may be replaced with values in the current dictionary.
                 // This needs to be done first to cover an edge case.
-                foreach (var (typeParam, paramRes) in resolvedDictionary.Where(entry => mayBeReplaced.Contains(entry.Key)))
+                foreach (var res in resolvedDictionary.Where(entry => mayBeReplaced.Contains(entry.Key)))
                 {
+                    TypeParameterName typeParam = res.Key;
+                    ResolvedType paramRes = res.Value;
+
                     this.UpdatedReplaceableResolutions(mayBeReplaced, combinedBuilder, typeParam, paramRes);
                 }
 
                 // Validate and add each resolution to the result.
-                foreach (var (typeParam, paramRes) in resolvedDictionary)
+                foreach (var res in resolvedDictionary)
                 {
+                    TypeParameterName typeParam = res.Key;
+                    ResolvedType paramRes = res.Value;
+
                     // Check that we are not constricting a type parameter to another type parameter of the same callable.
                     this.UpdateConstrictionFlag(typeParam, paramRes);
 

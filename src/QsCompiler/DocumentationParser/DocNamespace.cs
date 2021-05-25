@@ -186,8 +186,10 @@ namespace Microsoft.Quantum.QsCompiler.Documentation
             }
 
             itemListNode.Children.Clear();
-            foreach (var (uid, name) in itemsByUid.OrderBy(item => item.Key))
+            foreach (var kvp in itemsByUid.OrderBy(item => item.Key))
             {
+                string uid = kvp.Key;
+                string name = kvp.Value;
                 itemListNode.Add(Utils.BuildMappingNode(
                     Utils.NameKey, name, Utils.UidKey, uid));
             }

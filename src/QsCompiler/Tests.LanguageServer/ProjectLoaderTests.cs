@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.QsLanguageServer.Testing
         {
             var loader = new ProjectLoader();
             Assert.IsTrue(loader.IsSupportedQsFramework("netstandard2.0"));
-            Assert.IsTrue(loader.IsSupportedQsFramework("netstandard2.1"));
+            Assert.IsTrue(loader.IsSupportedQsFramework("netstandard2.0"));
             Assert.IsTrue(loader.IsSupportedQsFramework("netcoreapp2.0"));
             Assert.IsTrue(loader.IsSupportedQsFramework("netcoreapp2.1"));
             Assert.IsTrue(loader.IsSupportedQsFramework("netcoreapp2.2"));
@@ -98,7 +98,7 @@ namespace Microsoft.Quantum.QsLanguageServer.Testing
                 ("test9", "netcoreapp2.0"),
                 ("test10", "netcoreapp2.1"),
                 ("test11", "netcoreapp3.0"),
-                ("test12", "netstandard2.1"),
+                ("test12", "netstandard2.0"),
                 ("test13", "netcoreapp3.1")
             };
 

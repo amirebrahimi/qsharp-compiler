@@ -87,7 +87,9 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
         /// Returns true if the execution succeeded without throwing an exception, and false otherwise.
         /// NOTE: may deadlock if the given function to execute calls this processing queue.
         /// </summary>
-        public bool QueueForExecution<T>(Func<T> execute, [MaybeNull] out T result)
+        public bool QueueForExecution<T>(Func<T> execute,
+            //[MaybeNull]
+            out T result)
         {
             T res = default(T);
             var succeeded = true;
@@ -105,7 +107,7 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
                 }
             })
             .Wait();
-            result = res;
+            result = res!;
             return succeeded;
         }
 
@@ -142,7 +144,9 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
         /// Uses the set exception logger to log any exception that occurs during execution.
         /// NOTE: may deadlock if the given function to execute calls this processing queue.
         /// </summary>
-        public bool ConcurrentExecution<T>(Func<T> execute, [MaybeNull] out T result)
+        public bool ConcurrentExecution<T>(Func<T> execute,
+            //[MaybeNull]
+            out T result)
         {
             T res = default(T);
             var succeeded = true;
@@ -160,7 +164,7 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
                 }
             })
             .Wait();
-            result = res;
+            result = res!;
             return succeeded;
         }
     }

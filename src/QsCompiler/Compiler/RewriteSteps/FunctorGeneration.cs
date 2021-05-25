@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Quantum.QsCompiler.SyntaxTree;
 
@@ -44,7 +45,7 @@ namespace Microsoft.Quantum.QsCompiler.BuiltInRewriteSteps
             var providedOperations = new QsNamespace[] { requiredNamespace }
                 .Callables()
                 .Select(c => c.FullName)
-                .ToHashSet();
+                .ToImmutableHashSet();
             var requiredBuiltIns = new HashSet<QsQualifiedName>()
             {
                 BuiltIn.Length.FullName,

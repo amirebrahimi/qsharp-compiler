@@ -469,7 +469,7 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
                 // determine the whitespace for the replacement string
                 var lastLine = file.GetLine(lastFragToken.Line).Text.Substring(0, lastInScope.Range.Start.Column);
                 var trimmedLastLine = lastLine.TrimEnd();
-                var whitespace = lastLine[trimmedLastLine.Length..];
+                var whitespace = lastLine.Substring(trimmedLastLine!.Length);
 
                 // build the replacement string
                 var replaceString = lastBeforeErase.FollowedBy == CodeFragment.MissingDelimiter ? "" : $"{lastBeforeErase.FollowedBy}";

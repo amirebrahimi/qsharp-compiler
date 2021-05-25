@@ -884,7 +884,7 @@ type QsExpression with
                         method.RangeOrDefault |> addError (ErrorCode.UnresolvedTypeParameterForRecursiveCall, [])
 
                     // attach the new fully populated type arguments to the identifier of the callable
-                    let methodTypeParamResolutions = tArgs |> Seq.filter (snd >> (<>)(ResolvedType.New MissingType)) |> Seq.map KeyValuePair.Create |> ImmutableDictionary.CreateRange
+                    let methodTypeParamResolutions = tArgs |> Seq.filter (snd >> (<>)(ResolvedType.New MissingType)) |> Seq.map (fun tup -> KeyValuePair(tup.Item1, tup.Item2)) |> ImmutableDictionary.CreateRange
                     let methodTypeArgs = tArgs |> Seq.map snd |> ImmutableArray.CreateRange |> Value 
                     let typeParamRes = typeParamResolutions |> Seq.filter (fun kv -> fst kv.Key <> symbols.Parent) |> ImmutableDictionary.CreateRange
                     let methodExprKind = Identifier (GlobalCallable symbols.Parent, methodTypeArgs)

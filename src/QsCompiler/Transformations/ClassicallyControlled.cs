@@ -257,7 +257,7 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
                 /// statement. If valid, returns the identifier of the call like expression and the arguments of the
                 /// call like expression, otherwise returns null.
                 /// </summary>
-                [return: NotNullIfNotNull("scope")]
+                //[return: NotNullIfNotNull("scope")]
                 private (TypedExpression Id, TypedExpression Args)? IsValidScope(QsScope? scope)
                 {
                     // if the scope has exactly one statement in it and that statement is a call like expression statement
@@ -290,23 +290,26 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
 
                             QsCompilerError.Verify(globalCallable != null, $"Could not find the global reference {global.Item}.");
 
-                            var callableTypeParameters = globalCallable.Signature.TypeParameters.Select(param =>
+                            var callableTypeParameters = globalCallable?.Signature.TypeParameters.Select(param =>
                             {
                                 var name = param as QsLocalSymbol.ValidName;
                                 QsCompilerError.Verify(!(name is null), "Invalid type parameter name.");
                                 return name;
                             });
 
-                            newCallIdentifier = new TypedExpression(
-                                ExpressionKind.NewIdentifier(
-                                    id.Item1,
-                                    QsNullable<ImmutableArray<ResolvedType>>.NewValue(
-                                        callableTypeParameters
-                                        .Select(x => combinedTypeArguments[Tuple.Create(global.Item, x.Item)]).ToImmutableArray())),
-                                TypedExpression.AsTypeArguments(combinedTypeArguments),
-                                call.Item1.ResolvedType,
-                                call.Item1.InferredInformation,
-                                call.Item1.Range);
+                            if (callableTypeParameters != null)
+                            {
+                                newCallIdentifier = new TypedExpression(
+                                    ExpressionKind.NewIdentifier(
+                                        id.Item1,
+                                        QsNullable<ImmutableArray<ResolvedType>>.NewValue(
+                                            callableTypeParameters
+                                            .Select(x => combinedTypeArguments[Tuple.Create(global.Item, x != null ? x.Item : NonNullable<string>.New(string.Empty))]).ToImmutableArray())),
+                                    TypedExpression.AsTypeArguments(combinedTypeArguments),
+                                    call.Item1.ResolvedType,
+                                    call.Item1.InferredInformation,
+                                    call.Item1.Range);
+                            }
                         }
 
                         return (newCallIdentifier, call.Item2);
@@ -630,15 +633,15 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
 
                     if (condition.HasValue)
                     {
-                        if (this.IsConditionedOnResultLiteralExpression(condition.Value.Condition, out var literal, out var conditionExpression))
+                        if (this.IsConditionedOnResultLiteralExpression(condition.Value.Condition, out var literal, out var conditionExpression) && literal != null && conditionExpression != null)
                         {
                             return this.CreateControlStatement(statement, this.CreateApplyIfExpression(literal, conditionExpression, condition.Value.Body, condition.Value.Default));
                         }
-                        else if (this.IsConditionedOnResultEqualityExpression(condition.Value.Condition, out var lhsConditionExpression, out var rhsConditionExpression))
+                        else if (this.IsConditionedOnResultEqualityExpression(condition.Value.Condition, out var lhsConditionExpression, out var rhsConditionExpression) && lhsConditionExpression != null && rhsConditionExpression != null)
                         {
                             return this.CreateControlStatement(statement, this.CreateApplyConditionallyExpression(lhsConditionExpression, rhsConditionExpression, condition.Value.Body, condition.Value.Default));
                         }
-                        else if (this.IsConditionedOnResultInequalityExpression(condition.Value.Condition, out lhsConditionExpression, out rhsConditionExpression))
+                        else if (this.IsConditionedOnResultInequalityExpression(condition.Value.Condition, out lhsConditionExpression, out rhsConditionExpression) && lhsConditionExpression != null && rhsConditionExpression != null)
                         {
                             // The scope arguments are reversed to account for the negation of the NEQ
                             return this.CreateControlStatement(statement, this.CreateApplyConditionallyExpression(lhsConditionExpression, rhsConditionExpression, condition.Value.Default, condition.Value.Body));
@@ -681,8 +684,10 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
                 /// </summary>
                 private bool IsConditionedOnResultLiteralExpression(
                     TypedExpression expression,
-                    [NotNullWhen(true)] out QsResult? literal,
-                    [NotNullWhen(true)] out TypedExpression? conditionExpression)
+                    //[NotNullWhen(true)]
+                    out QsResult? literal,
+                    //[NotNullWhen(true)]
+                    out TypedExpression? conditionExpression)
                 {
                     literal = null;
                     conditionExpression = null;
@@ -729,8 +734,10 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
                 /// </summary>
                 private bool IsConditionedOnResultEqualityExpression(
                     TypedExpression expression,
-                    [NotNullWhen(true)] out TypedExpression? lhs,
-                    [NotNullWhen(true)] out TypedExpression? rhs)
+                    //[NotNullWhen(true)]
+                    out TypedExpression? lhs,
+                    //[NotNullWhen(true)]
+                    out TypedExpression? rhs)
                 {
                     lhs = null;
                     rhs = null;
@@ -753,8 +760,10 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
                 /// </summary>
                 private bool IsConditionedOnResultInequalityExpression(
                     TypedExpression expression,
-                    [NotNullWhen(true)] out TypedExpression? lhs,
-                    [NotNullWhen(true)] out TypedExpression? rhs)
+                    //[NotNullWhen(true)]
+                    out TypedExpression? lhs,
+                    //[NotNullWhen(true)]
+                    out TypedExpression? rhs)
                 {
                     lhs = null;
                     rhs = null;
@@ -872,7 +881,8 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
                                     block.Location,
                                     block.Comments);
                                 newConditionBlocks.Add(Tuple.Create(expr.Item, block));
-                                generatedOperations.Add(callable);
+                                if (callable != null)
+                                    generatedOperations.Add(callable);
                             }
                             else
                             {
@@ -916,7 +926,8 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ClassicallyControlled
                                     block.Location,
                                     block.Comments);
                                 newDefault = QsNullable<QsPositionedBlock>.NewValue(block);
-                                generatedOperations.Add(callable);
+                                if (callable != null)
+                                    generatedOperations.Add(callable);
                             }
                             else
                             {

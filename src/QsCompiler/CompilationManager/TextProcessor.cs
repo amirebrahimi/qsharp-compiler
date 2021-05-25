@@ -138,11 +138,11 @@ namespace Microsoft.Quantum.QsCompiler.CompilationBuilder
             var middle = file.GetLines(start + 1, count - 2).Select(CodeLine).ToArray();
             if (middle.Length == 0)
             {
-                return Utils.JoinLines(new string[] { prepend, append });
+                return Utils.JoinLines(new string[] { prepend, append })!;
             }
             else
             {
-                return Utils.JoinLines(new string[] { prepend, Utils.JoinLines(middle), append }); // Note: use JoinLines here to get accurate position infos for errors
+                return Utils.JoinLines(new string[] { prepend, Utils.JoinLines(middle)!, append })!; // Note: use JoinLines here to get accurate position infos for errors
             }
         }
 

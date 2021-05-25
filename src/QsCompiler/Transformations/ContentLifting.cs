@@ -241,8 +241,10 @@ namespace Microsoft.Quantum.QsCompiler.Transformations.ContentLifting
             /// </summary>
             public bool LiftBody(
                 QsScope body,
-                [NotNullWhen(true)] out QsCallable? callable,
-                [NotNullWhen(true)] out QsStatement? callStatement)
+                //[NotNullWhen(true)]
+                out QsCallable? callable,
+                //[NotNullWhen(true)]
+                out QsStatement? callStatement)
             {
                 if (!this.IsValidScope || this.CurrentCallable is null)
                 {

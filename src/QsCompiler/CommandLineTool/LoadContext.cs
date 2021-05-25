@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 // This unfortunately needs to live in this project
-// since the functionality is not available in netstandard2.1.
+// since the functionality is not available in netstandard2.0.
 
 using System;
 using System.Collections.Concurrent;

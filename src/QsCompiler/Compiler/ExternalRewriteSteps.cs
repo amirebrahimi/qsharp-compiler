@@ -37,21 +37,21 @@ namespace Microsoft.Quantum.QsCompiler
                 // However, unless you know what you are doing, please don't change it.
                 // If you are sure you know what you are doing, please make sure the loading via reflection works for rewrite steps
                 // implemented in both F# or C#, and whether they are compiled against the current compiler version or an older one.
-                this.interfaceMethods?.FirstOrDefault(method => method.Name.Split("-").Last() == name);
+                this.interfaceMethods?.FirstOrDefault(method => method.Name.Split('-').Last() == name);
 
             private object? GetViaReflection(string name) =>
                 this.InterfaceMethod($"get_{name}")?.Invoke(this.selfAsObject, null);
 
-            [return: MaybeNull]
+            //[return: MaybeNull]
             private T GetViaReflection<T>(string name) =>
-                (T)this.InterfaceMethod($"get_{name}")?.Invoke(this.selfAsObject, null);
+                (T)this.InterfaceMethod($"get_{name}")?.Invoke(this.selfAsObject, null)!;
 
             private void SetViaReflection<T>(string name, T arg) =>
                 this.InterfaceMethod($"set_{name}")?.Invoke(this.selfAsObject, new object?[] { arg });
 
-            [return: MaybeNull]
+            //[return: MaybeNull]
             private T InvokeViaReflection<T>(string name, params object?[] args) =>
-                (T)this.InterfaceMethod(name)?.Invoke(this.selfAsObject, args);
+                (T)this.InterfaceMethod(name)?.Invoke(this.selfAsObject, args)!;
 
             /// <summary>
             /// Attempts to construct a rewrite step via reflection.
@@ -340,8 +340,8 @@ namespace Microsoft.Quantum.QsCompiler
 
                     // We don't overwrite assembly properties specified by configuration.
                     var defaultOutput = assemblyConstants.TryGetValue(AssemblyConstants.OutputPath, out var path) ? path : null;
-                    assemblyConstants.TryAdd(AssemblyConstants.OutputPath, outputFolder ?? defaultOutput ?? config.BuildOutputFolder);
-                    assemblyConstants.TryAdd(AssemblyConstants.AssemblyName, config.ProjectNameWithoutExtension);
+                    assemblyConstants!.TryAdd(AssemblyConstants.OutputPath, outputFolder ?? defaultOutput ?? config.BuildOutputFolder!);
+                    assemblyConstants!.TryAdd(AssemblyConstants.AssemblyName, config.ProjectNameWithoutExtension!);
                 }
 
                 CompilationLoader.SortRewriteSteps(loadedSteps, step => step.Priority);
